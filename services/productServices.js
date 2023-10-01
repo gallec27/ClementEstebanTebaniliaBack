@@ -50,8 +50,7 @@ async function checkProduct(cod) {
 // Función para leer todos los productos de la base de datos
 async function readProducts() {
   try {    
-    const productos = await Product.findAll();
-    console.log("BACKEND Service Products:", productos);    
+    const productos = await Product.findAll();        
     return productos;
   } catch (error) {
     throw error;
@@ -61,8 +60,7 @@ async function readProducts() {
 // Función para leer todos los productos de la base de datos
 async function readCategories() {
   try {    
-    const categories = await Category.findAll();
-    console.log("BACKEND Service Categories:", categories)    
+    const categories = await Category.findAll();       
     return categories;
   } catch (error) {
     throw error;

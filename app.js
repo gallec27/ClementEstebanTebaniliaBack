@@ -2,6 +2,8 @@ const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const morgan = require('morgan');
+const path = require('path');
+
 const app = express();
 const PORT = 3000;
 
@@ -14,7 +16,8 @@ sequelize.sync({ force: false }).then(() => {
 
 //middlewares
 app.set("view engine", "ejs");
-app.use(express.static("public")); //carpeta publica para archivos estaticos (css, js, img, etc)
+//app.use('/public', express.static('public')); //carpeta publica para archivos estaticos (css, js, img, etc)
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('dev'));
@@ -35,10 +38,6 @@ app.use(
     },
   })
 );
-
-
-
-//app.use("/", require("./routes/indexRoutes"));
 
 app.use("/products", require("./routes/productRoutes"));
 
