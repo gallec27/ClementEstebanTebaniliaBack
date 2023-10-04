@@ -41,7 +41,7 @@ app.use(
 
 app.use("/products", require("./routes/productRoutes"));
 
-//app.use("/user", require("./routes/userRoutes"));
+app.use("/user", require("./routes/userRoutes"));
 
 //app.use("/admin", require("./routes/adminRoutes"));
 

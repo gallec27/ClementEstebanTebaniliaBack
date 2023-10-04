@@ -13,7 +13,7 @@ const validateLogin = require("../middlewares/validateLogin.js");
 const router = express.Router();
 
 router.get("/login", renderLogin);
-router.post("/login", validateLogin, login);
+router.post("/login", login);
 router.get("/register", renderRegister);
 router.post("/register", validateRegister, registerUser);
 router.get("/logout", logout);

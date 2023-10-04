@@ -37,52 +37,40 @@ const registerUser = async (req, res) => {
 
       saveUser(nuevoUsuario);
 
-      // Guardar el valor del usuario recién registrado en la sesión
-      req.session.usuario = nuevoUsuario;
-
       res.redirect("/");
     });
   } else {
-    //res.send("Ya existe ese usuario.");
     res.render("register", { errors : [{ msg: "Ya existe ese usuario." }] })
   }
 };
 
 const login = async (req, res) => {  
   const { email, password } = req.body;
-
-  // buscar en el array de usuarios el que coincida con el email, si ninguno coincide, enviar un error
+  
   const usuarioOk = await findUser(email);
   
   if (usuarioOk !== null) {
     bcrypt.compare(password, usuarioOk.password, (error, result) => {
       if (error) {        
-        return res.status(400).send("Error al comparar la contraseña.");
+        return res.status(400).json({ success: false, message: "Error al comparar la contraseña." });
       }
-      // result solo va a ser TRUE o FALSE
+      
       if (result) {
-        // Guardar el valor del usuario recién logueado en la sesión
-        req.session.usuario = usuarioOk;
-
         if (usuarioOk.nivelAcceso === "client") {
-          res.redirect("/");
+          res.status(200).json({ success: true, message: "Autenticación exitosa", redirectTo: "/productos" });
         } else if (usuarioOk.nivelAcceso === "admin") {
-          // redireccionar al perfil
-          res.render("profile", { req });
+          res.status(200).json({ success: true, message: "Autenticación exitosa", redirectTo: "/productos" });
         }
       } else {
-        //  renderizar una vista con el error
-        res.render("login", { errors : [{ msg: "Contraseña incorrecta." }] });
+        res.status(401).json({ success: false, message: "Contraseña incorrecta." });
       }
     });
   } else {
-    const errors = [{ msg: "El usuario no existe." }];
-    return res.render("login", { errors });
+    res.status(404).json({ success: false, message: "El usuario no existe." });
   }
 };
 
 const logout = (req, res) => {
-  req.session.usuario = null;
   res.redirect('/');
 }
 

@@ -13,6 +13,7 @@ async function saveUser(nuevoUsuario) {
 // Función para buscar un usuario por su email
 async function findUser(emailLogin) {
   try {
+    console.log("findUser:", emailLogin)
     const usuario = await User.findOne({ where: { email: emailLogin } });
        
     return usuario;
@@ -24,6 +25,7 @@ async function findUser(emailLogin) {
 // Función para verificar si un usuario existe por su email
 async function checkUser(emailLogin) {
   try {
+    console.log("CheckUser:", emailLogin)
     const usuario = await User.findOne({ where: { email: emailLogin } });
     
     return usuario !== null;
