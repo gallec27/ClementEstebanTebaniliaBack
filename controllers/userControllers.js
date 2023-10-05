@@ -57,9 +57,9 @@ const login = async (req, res) => {
       
       if (result) {
         if (usuarioOk.nivelAcceso === "client") {
-          res.status(200).json({ success: true, message: "Autenticación exitosa", redirectTo: "/productos" });
+          res.status(200).json({ success: true, message: "Autenticación exitosa", user: usuarioOk, redirectTo: "/productos" });
         } else if (usuarioOk.nivelAcceso === "admin") {
-          res.status(200).json({ success: true, message: "Autenticación exitosa", redirectTo: "/productos" });
+          res.status(200).json({ success: true, message: "Autenticación exitosa", user: usuarioOk, redirectTo: "/productos" });
         }
       } else {
         res.status(401).json({ success: false, message: "Contraseña incorrecta." });
@@ -68,6 +68,7 @@ const login = async (req, res) => {
   } else {
     res.status(404).json({ success: false, message: "El usuario no existe." });
   }
+  
 };
 
 const logout = (req, res) => {
