@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "Frankce_051078*ECF",
+    "database": "tebanilia",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "Frankce_051078*ECF",
+    "database": "tebanilia",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "Frankce_051078*ECF",
+    "database": "tebanilia",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

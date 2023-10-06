@@ -9,13 +9,13 @@ const {
 } = require("../controllers/userControllers.js");
 
 const validateRegister = require("../middlewares/validateRegister.js");
-const validateLogin = require("../middlewares/validateLogin.js");
+//const validateLogin = require("../middlewares/validateLogin.js");
 const router = express.Router();
 
-router.get("/login", renderLogin);
+//router.get("/login", renderLogin);
 router.post("/login", login);
-router.get("/register", renderRegister);
-router.post("/register", validateRegister, registerUser);
+//router.get("/register", renderRegister);
+router.post("/register", registerUser);
 router.get("/logout", logout);
 
 module.exports = router;

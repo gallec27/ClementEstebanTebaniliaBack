@@ -2,29 +2,42 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize-config');
 
 const User = sequelize.define('tb_users', {
-  nombre: {
+  firstName: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  apellido: {
+  surname: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  fechaNac: {
+  birthDay: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: false
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  telephone: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // Asegura que el email sea único
+    unique: true 
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  nivelAcceso: {
+  role: {
     type: DataTypes.STRING,
+    allowNull: false
   },
 }, {
   timestamps: true, // Esto habilitará los campos createdAt y updatedAt

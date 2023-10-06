@@ -1,17 +1,26 @@
 const bcrypt = require("bcrypt");
 const { saveUser, findUser, checkUser } = require("../services/userServices");
 
-const renderLogin = (req, res) => {
+/* const renderLogin = (req, res) => {
   res.render("login", { errors: [] });
 };
 
 const renderRegister = (req, res) => {
   res.render("register", { errors: [] });
-};
+}; */
 
 const registerUser = async (req, res) => {
-  //Destructuring  
-  const { nombre, apellido, fechaNac, email, password } = req.body;
+  // Destructuring
+  const {
+    firstName,
+    surname,
+    birthDay,
+    address,
+    location,
+    telephone,
+    email,
+    password,
+  } = req.body;
 
   // buscar la tabla de usuarios el que coincida con el email, si ninguno coincide, enviar un error
   const user = await checkUser(email);
@@ -19,30 +28,38 @@ const registerUser = async (req, res) => {
   if (!user) {
     // Generar un salt (valor aleatorio) para fortalecer el hashing
     const saltRounds = 10;
+
     // Aplicar el hashing de la contraseña utilizando bcrypt
-    bcrypt.hash(password, saltRounds, (error, hashedPassword) => {
-      if (error) {        
-        res.status(500).send("Error al hashear la contraseña.");
-        return;
-      }
+    try {
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
       // Crear un objeto con el email y la contraseña hasheada
       const nuevoUsuario = {
-        nombre,
-        apellido,
-        fechaNac,
+        firstName,
+        surname,
+        birthDay,
+        address,
+        location,
+        telephone,
         email,
         password: hashedPassword, // Guardar la contraseña hasheada en lugar de la original
-        nivelAcceso: "client",
+        role: "client",
       };
 
-      saveUser(nuevoUsuario);
+      const userSaved = await saveUser(nuevoUsuario);
+      if (userSaved !== null) {
+        await login(userSaved);
+      }
 
-      res.redirect("/");
-    });
+      // res.redirect("/");
+    } catch (error) {
+      res.status(500).send("Error al hashear la contraseña.");
+    }
   } else {
-    res.render("register", { errors : [{ msg: "Ya existe ese usuario." }] })
+    res.status(404).json({ success: false, message: "El usuario ya existe." });
   }
 };
+
 
 const login = async (req, res) => {  
   const { email, password } = req.body;
@@ -68,7 +85,6 @@ const login = async (req, res) => {
   } else {
     res.status(404).json({ success: false, message: "El usuario no existe." });
   }
-  
 };
 
 const logout = (req, res) => {
@@ -76,8 +92,8 @@ const logout = (req, res) => {
 }
 
 module.exports = {
-  renderLogin,
-  renderRegister,
+  /* renderLogin,
+  renderRegister, */
   registerUser,
   login,
   logout
