@@ -2,9 +2,9 @@ const Category = require('../models/category');
 const  Product = require('../models/product'); 
 
 // Función para guardar un nuevo producto en la base de datos
-async function saveProduct(nuevoProducto) {
+async function saveProduct(newProduct) {
   try {
-    const producto = await Product.create(nuevoProducto);
+    const producto = await Product.create(newProduct);
     return producto;
   } catch (error) {
     throw error;

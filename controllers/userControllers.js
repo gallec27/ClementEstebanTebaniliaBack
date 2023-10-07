@@ -1,14 +1,6 @@
 const bcrypt = require("bcrypt");
 const { saveUser, findUser, checkUser } = require("../services/userServices");
 
-/* const renderLogin = (req, res) => {
-  res.render("login", { errors: [] });
-};
-
-const renderRegister = (req, res) => {
-  res.render("register", { errors: [] });
-}; */
-
 const registerUser = async (req, res) => {
   // Destructuring
   const {
@@ -34,7 +26,7 @@ const registerUser = async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       // Crear un objeto con el email y la contraseña hasheada
-      const nuevoUsuario = {
+      const newUser = {
         firstName,
         surname,
         birthDay,
@@ -46,9 +38,10 @@ const registerUser = async (req, res) => {
         role: "client",
       };
 
-      const userSaved = await saveUser(nuevoUsuario);
+      console.log("userController-registerUser:", newUser);
+      const userSaved = await saveUser(newUser);
       if (userSaved !== null) {
-        await login(userSaved);
+        return await login(userSaved);
       }
 
       // res.redirect("/");
@@ -73,9 +66,9 @@ const login = async (req, res) => {
       }
       
       if (result) {
-        if (usuarioOk.nivelAcceso === "client") {
+        if (usuarioOk.role === "client") {
           res.status(200).json({ success: true, message: "Autenticación exitosa", user: usuarioOk, redirectTo: "/productos" });
-        } else if (usuarioOk.nivelAcceso === "admin") {
+        } else if (usuarioOk.role === "admin") {
           res.status(200).json({ success: true, message: "Autenticación exitosa", user: usuarioOk, redirectTo: "/productos" });
         }
       } else {
@@ -91,9 +84,7 @@ const logout = (req, res) => {
   res.redirect('/');
 }
 
-module.exports = {
-  /* renderLogin,
-  renderRegister, */
+module.exports = { 
   registerUser,
   login,
   logout

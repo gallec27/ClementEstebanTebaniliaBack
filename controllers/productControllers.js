@@ -4,7 +4,7 @@ const {
   findProduct,
   checkProduct,
   deleteProduct,
-  readCategories
+  readCategories,
 } = require("../services/productServices");
 
 const multer = require("multer");
@@ -25,31 +25,15 @@ const storage = multer.diskStorage({
 // Crea una instancia de multer con la configuración
 const upload = multer({ storage });
 
-const renderCart = (req, res) => {
-  // Envía una respuesta JSON en lugar de renderizar una vista
-  res.json({ message: "Cart Page" });
-};
-
-const renderDetails = async (req, res) => {
-  try {
-    const productCodigo = req.params.codigo;
-    const product = await findProduct(productCodigo);
-    res.json(product);
-  } catch (error) {
-    console.error(error);
-    // Manejar el error apropiadamente
-    res.status(500).json({ error: "Error al cargar la página" });
-  }
-};
-
-const renderCreate = (req, res) => {
-  // Envía una respuesta JSON en lugar de renderizar una vista
-  res.json({ message: "Create Product Page" });
-};
-
 const registerProduct = async (req, res) => {
   // Destructuring
-  const { codigo, nombre, detalle, precio, descripcion } = req.body;
+  const {
+    productCode,
+    productName,
+    productDetail,
+    productPrice,
+    productDescription,
+  } = req.body;
 
   // Verifica si se cargó una imagen
   if (!req.file) {
@@ -57,18 +41,18 @@ const registerProduct = async (req, res) => {
   }
 
   if (!(await checkProduct(codigo))) {
-    const nuevoProducto = {
-      codigo,
-      nombre,
-      detalle,
-      precio,
-      descripcion,
+    const newProduct = {
+      productCode,
+      productName,
+      productDetail,
+      productPrice,
+      productDescription,
       imagen: req.file.filename,
     };
 
-    await saveProduct(nuevoProducto);
+    await saveProduct(newProduct);
 
-    res.status(201).json({ message: "Producto registrado con éxito" });
+    res.status(201).json({ message: "Producto registrado con éxito." });
   } else {
     res.status(400).json({ error: "Ya existe ese producto." });
   }
@@ -77,7 +61,7 @@ const registerProduct = async (req, res) => {
 const getCategories = async (req, res) => {
   try {
     const categories = await readCategories(); // Obtén todas las categorías desde la base de datos
-    
+
     res.json(categories); // Envía las categorías como respuesta JSON
   } catch (error) {
     console.error(error);
@@ -85,10 +69,10 @@ const getCategories = async (req, res) => {
   }
 };
 
-const renderListProduct = async (req, res) => {
+const getListProduct = async (req, res) => {
   try {
     // Obtener todos los productos usando la función readProducts
-    const products = await readProducts();     
+    const products = await readProducts();
 
     res.json(products);
   } catch (error) {
@@ -98,7 +82,7 @@ const renderListProduct = async (req, res) => {
   }
 };
 
-const renderActionProduct = async (req, res) => {
+const getActionProduct = async (req, res) => {
   try {
     const productCodigo = req.params.codigo;
     const product = await findProduct(productCodigo);
@@ -114,23 +98,29 @@ const renderActionProduct = async (req, res) => {
 const actionProduct = async (req, res) => {
   const accion = req.body.accion;
   // Destructuring
-  const { codigo, nombre, detalle, precio, descripcion } = req.body;
+  const {
+    productCode,
+    productName,
+    productDetail,
+    productPrice,
+    productDescription,
+  } = req.body;
 
   if (accion === "guardar") {
     if (await checkProduct(codigo)) {
       await deleteProduct(codigo);
     }
 
-    const nuevoProducto = {
-      codigo,
-      nombre,
-      detalle,
-      precio,
-      descripcion,
+    const newProduct = {
+      productCode,
+      productName,
+      productDetail,
+      productPrice,
+      productDescription,
       imagen: req.file.filename,
     };
 
-    await saveProduct(nuevoProducto);
+    await saveProduct(newProduct);
     const products = await readProducts();
 
     res.json({ products });
@@ -142,12 +132,9 @@ const actionProduct = async (req, res) => {
 };
 
 module.exports = {
-  renderCart,
-  renderDetails,
-  renderCreate,
+  getListProduct,
   registerProduct,
-  renderListProduct,
-  renderActionProduct,
   actionProduct,
-  getCategories
+  getCategories,
+  getActionProduct
 };

@@ -22,10 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Configurar cookie-parser
-app.use(cookieParser());
+/* // Configurar cookie-parser
+app.use(cookieParser()); */
 
-// Configurar express-session
+/* // Configurar express-session
 app.use(
   session({
     secret: "tebanilia_sabores", 
@@ -37,13 +37,11 @@ app.use(
       maxAge: 3600000, // Tiempo de expiración de la cookie en milisegundos (aquí se establece a 1 hora)
     },
   })
-);
+); */
 
 app.use("/products", require("./routes/productRoutes"));
 
 app.use("/user", require("./routes/userRoutes"));
-
-//app.use("/admin", require("./routes/adminRoutes"));
 
 app.listen(PORT, () => {
     console.log(`listening at http://localhost:${PORT}`)
