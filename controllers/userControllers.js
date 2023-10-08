@@ -41,15 +41,15 @@ const registerUser = async (req, res) => {
       console.log("userController-registerUser:", newUser);
       const userSaved = await saveUser(newUser);
       if (userSaved !== null) {
-        return await login(userSaved);
+        return res.status(200).json({ success: true, message: "Registración exitosa", user: userSaved, redirectTo: "/products" });
+      } else {
+        return res.status(500).json({ success: false, message: "Fallo en registro de usuario." });
       }
-
-      // res.redirect("/");
     } catch (error) {
-      res.status(500).send("Error al hashear la contraseña.");
+      return res.status(500).send("Error al hashear la contraseña.");
     }
   } else {
-    res.status(404).json({ success: false, message: "El usuario ya existe." });
+    return res.status(404).json({ success: false, message: "El usuario ya existe." });
   }
 };
 

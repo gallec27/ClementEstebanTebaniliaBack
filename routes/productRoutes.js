@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/productControllers");
-const validateProduct = require("../middlewares/validateProduct");
 
 // Importa Multer
 const multer = require("multer");
@@ -22,11 +21,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Utiliza Multer como middleware en la ruta de creación de productos
-router.post("/create", upload.single("imagen"), validateProduct, productController.registerProduct);
+router.post("/create", upload.single("imagen"), productController.registerProduct);
 
 router.get("/list", productController.getListProduct);
 router.get('/action/:codigo', productController.getActionProduct);
-router.post('/action/', upload.single("imagen"), validateProduct, productController.actionProduct);
+router.post('/action/', upload.single("imagen"), productController.actionProduct);
 
 router.get("/categories", productController.getCategories);
 
