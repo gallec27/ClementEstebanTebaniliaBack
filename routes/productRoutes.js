@@ -24,8 +24,9 @@ const upload = multer({ storage });
 router.post("/create", upload.single("imagen"), productController.registerProduct);
 
 router.get("/list", productController.getListProduct);
-router.get('/action/:codigo', productController.getActionProduct);
-router.post('/action/', upload.single("imagen"), productController.actionProduct);
+//router.get('/action/:codigo', productController.getActionProduct);
+//router.post('/action/', upload.single("imagen"), productController.actionProduct);
+router.post("/delete", productController.actionProductDelete);
 
 router.get("/categories", productController.getCategories);
 

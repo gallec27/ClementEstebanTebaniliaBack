@@ -40,7 +40,7 @@ const registerProduct = async (req, res) => {
     return res.status(400).json({ error: "Debes cargar una imagen." });
   }
 
-  if (!(await checkProduct(codigo))) {
+  if (!(await checkProduct(productCode))) {
     const newProduct = {
       productCode,
       productName,
@@ -76,8 +76,6 @@ const getListProduct = async (req, res) => {
 
     res.json(products);
   } catch (error) {
-    console.error(error);
-    // Manejar el error apropiadamente
     res.status(500).json({ error: "Error al cargar la página" });
   }
 };
@@ -95,8 +93,19 @@ const getActionProduct = async (req, res) => {
   }
 };
 
-const actionProduct = async (req, res) => {
-  const accion = req.body.accion;
+const actionProductDelete = async (req, res) => {
+  try {
+    const productCode = req.body.codigo;
+    await deleteProduct(productCode);
+
+    const products = await readProducts();
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: "Error al eliminar el producto." });
+  }
+};
+
+const actionProductSave = async (req, res) => {
   // Destructuring
   const {
     productCode,
@@ -106,35 +115,30 @@ const actionProduct = async (req, res) => {
     productDescription,
   } = req.body;
 
-  if (accion === "guardar") {
-    if (await checkProduct(codigo)) {
-      await deleteProduct(codigo);
-    }
-
-    const newProduct = {
-      productCode,
-      productName,
-      productDetail,
-      productPrice,
-      productDescription,
-      imagen: req.file.filename,
-    };
-
-    await saveProduct(newProduct);
-    const products = await readProducts();
-
-    res.json({ products });
-  } else if (accion === "eliminar") {
-    await deleteProduct(codigo);
-    const products = await readProducts();
-    res.json({ products });
+  if (await checkProduct(productCode)) {
+    await deleteProduct(productCode);
   }
+
+  const newProduct = {
+    productCode,
+    productName,
+    productDetail,
+    productPrice,
+    productDescription,
+    imagen: req.file.filename,
+  };
+
+  await saveProduct(newProduct);
+  const products = await readProducts();
+
+  res.json({ products });
 };
 
 module.exports = {
   getListProduct,
   registerProduct,
-  actionProduct,
+  actionProductDelete,
+  actionProductSave,
   getCategories,
-  getActionProduct
+  getActionProduct,
 };

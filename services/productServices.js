@@ -1,5 +1,5 @@
-const Category = require('../models/category');
-const  Product = require('../models/product'); 
+const Category = require("../models/category");
+const Product = require("../models/product");
 
 // Función para guardar un nuevo producto en la base de datos
 async function saveProduct(newProduct) {
@@ -13,9 +13,9 @@ async function saveProduct(newProduct) {
 
 // Función para buscar un producto por su ID
 async function findProduct(cod) {
-  try {    
+  try {
     const producto = await Product.findOne({
-      where: { codigo: cod }
+      where: { productCode: cod },
     });
     return producto;
   } catch (error) {
@@ -26,11 +26,9 @@ async function findProduct(cod) {
 // Función para eliminar un producto por su CODIGO
 async function deleteProduct(cod) {
   try {
-    const producto =  await findProduct(cod);
-    
-    if (producto) {
-      await producto.destroy();
-    }
+    const producto = await findProduct(cod);
+
+    await producto.destroy();
   } catch (error) {
     throw error;
   }
@@ -40,7 +38,7 @@ async function deleteProduct(cod) {
 async function checkProduct(cod) {
   try {
     const producto = await findProduct(cod);
-    
+
     return producto !== null;
   } catch (error) {
     throw error;
@@ -49,8 +47,8 @@ async function checkProduct(cod) {
 
 // Función para leer todos los productos de la base de datos
 async function readProducts() {
-  try {    
-    const productos = await Product.findAll();        
+  try {
+    const productos = await Product.findAll();
     return productos;
   } catch (error) {
     throw error;
@@ -59,8 +57,8 @@ async function readProducts() {
 
 // Función para leer todos los productos de la base de datos
 async function readCategories() {
-  try {    
-    const categories = await Category.findAll();       
+  try {
+    const categories = await Category.findAll();
     return categories;
   } catch (error) {
     throw error;
@@ -73,5 +71,5 @@ module.exports = {
   deleteProduct,
   checkProduct,
   readProducts,
-  readCategories
+  readCategories,
 };
