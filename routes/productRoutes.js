@@ -22,12 +22,10 @@ const upload = multer({ storage });
 
 // Utiliza Multer como middleware en la ruta de creación de productos
 router.post("/create", upload.single("imagen"), productController.registerProduct);
-
 router.get("/list", productController.getListProduct);
-//router.get('/action/:codigo', productController.getActionProduct);
-//router.post('/action/', upload.single("imagen"), productController.actionProduct);
 router.post("/delete", productController.actionProductDelete);
-
+router.get("/edit", productController.getProduct);
+router.post("/edit", upload.single("imagen"), productController.actionProductSave);
 router.get("/categories", productController.getCategories);
 
 module.exports = router;

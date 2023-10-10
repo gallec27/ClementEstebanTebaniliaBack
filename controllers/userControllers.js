@@ -37,8 +37,7 @@ const registerUser = async (req, res) => {
         password: hashedPassword, // Guardar la contraseña hasheada en lugar de la original
         role: "client",
       };
-
-      console.log("userController-registerUser:", newUser);
+      
       const userSaved = await saveUser(newUser);
       if (userSaved !== null) {
         return res.status(200).json({ success: true, message: "Registración exitosa", user: userSaved, redirectTo: "/products" });

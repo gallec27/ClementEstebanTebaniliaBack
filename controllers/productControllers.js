@@ -26,35 +26,48 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const registerProduct = async (req, res) => {
-  // Destructuring
-  const {
-    productCode,
-    productName,
-    productDetail,
-    productPrice,
-    productDescription,
-  } = req.body;
+  try {
+    console.log("registerProduct", req.body);
 
-  // Verifica si se cargó una imagen
-  if (!req.file) {
-    return res.status(400).json({ error: "Debes cargar una imagen." });
-  }
-
-  if (!(await checkProduct(productCode))) {
-    const newProduct = {
+    // Destructuring
+    const {
       productCode,
       productName,
       productDetail,
       productPrice,
       productDescription,
-      imagen: req.file.filename,
-    };
+      category_id,
+    } = req.body;
 
-    await saveProduct(newProduct);
+    // Verifica si se cargó una imagen
+    if (!req.file) {
+      console.log("Control de imagen: ", req.file);
+      return res.status(400).json({ error: "Debes cargar una imagen." });
+    }
 
-    res.status(201).json({ message: "Producto registrado con éxito." });
-  } else {
-    res.status(400).json({ error: "Ya existe ese producto." });
+    //const productCategoryId = productCategory.id;
+
+    if (!(await checkProduct(productCode))) {
+      const newProduct = {
+        productCode,
+        productName,
+        productDetail,
+        productPrice,
+        productDescription,
+        productImage: req.file.filename,
+        category_id,
+      };
+
+      console.log("newProduct: ", newProduct);
+
+      await saveProduct(newProduct);
+
+      res.status(201).json({ message: "Producto registrado con éxito." });
+    } else {
+      res.status(400).json({ error: "Ya existe ese producto." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al crear el producto." });
   }
 };
 
@@ -77,6 +90,21 @@ const getListProduct = async (req, res) => {
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Error al cargar la página" });
+  }
+};
+
+const getProduct = async (req, res) => {
+  try {
+    const productCode = req.query.code;
+    const product = await findProduct(productCode);
+
+    res.status(200).json({
+      success: true,
+      message: "Producto encontrado",
+      productToEdit: product,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Error al buscar el producto." });
   }
 };
 
@@ -106,32 +134,46 @@ const actionProductDelete = async (req, res) => {
 };
 
 const actionProductSave = async (req, res) => {
-  // Destructuring
-  const {
-    productCode,
-    productName,
-    productDetail,
-    productPrice,
-    productDescription,
-  } = req.body;
+  try {
+    // Destructuring
+    const {
+      productCode,
+      productName,
+      productDetail,
+      productPrice,
+      productDescription,
+      category_id,
+    } = req.body;
 
-  if (await checkProduct(productCode)) {
-    await deleteProduct(productCode);
+    // Verifica si se cargó una imagen
+    if (!req.file) {
+      console.log("Control de imagen: ", req.file);
+      return res.status(400).json({ error: "Debes cargar una imagen." });
+    }
+
+    //const productCategoryId = productCategory.id;
+    if (await checkProduct(productCode)) {
+      await deleteProduct(productCode);
+    }
+
+    const newProduct = {
+      productCode,
+      productName,
+      productDetail,
+      productPrice,
+      productDescription,
+      productImage: req.file.filename,
+      category_id,
+    };
+
+    console.log("newProduct: ", newProduct);
+
+    await saveProduct(newProduct);
+
+    res.status(201).json({ message: "Producto editado con éxito." });
+  } catch (error) {
+    res.status(500).json({ error: "Error al modificar el producto." });
   }
-
-  const newProduct = {
-    productCode,
-    productName,
-    productDetail,
-    productPrice,
-    productDescription,
-    imagen: req.file.filename,
-  };
-
-  await saveProduct(newProduct);
-  const products = await readProducts();
-
-  res.json({ products });
 };
 
 module.exports = {
@@ -141,4 +183,5 @@ module.exports = {
   actionProductSave,
   getCategories,
   getActionProduct,
+  getProduct,
 };
