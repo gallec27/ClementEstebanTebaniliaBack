@@ -2,8 +2,7 @@ const  User  = require('../models/user'); // Importa tu modelo de usuario
 
 // Función para guardar un nuevo usuario en la base de datos
 async function saveUser(newUser) {
-  try {
-    console.log("userService-saveUser:", newUser);
+  try {   
     const usuario = await User.create(newUser);
     return usuario;
   } catch (error) {
@@ -27,8 +26,6 @@ async function checkUser(emailLogin) {
   try {
     console.log("CheckUser:", emailLogin)
     const usuario = await User.findOne({ where: { email: emailLogin } });
-    
-    console.log("checkUser-return finOne:", usuario);
     return usuario !== null;
   } catch (error) {
     throw error;

@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize-config');
-const User = require('./user'); // Asegúrate de importar el modelo de usuario si aún no lo has hecho
+const User = require('./user'); 
 
 const Order = sequelize.define('tb_orders', {
   total_price: {
@@ -8,7 +8,7 @@ const Order = sequelize.define('tb_orders', {
     allowNull: false,
   },
   shipping_type: {
-    type: DataTypes.ENUM('retiro por el local', 'envío a domicilio'),
+    type: DataTypes.ENUM('Retira por el local', 'Enviar a domicilio'),
     allowNull: false,
   },
   shipping_address: {

@@ -40,8 +40,7 @@ const registerProduct = async (req, res) => {
     } = req.body;
 
     // Verifica si se cargó una imagen
-    if (!req.file) {
-      console.log("Control de imagen: ", req.file);
+    if (!req.file) {      
       return res.status(400).json({ error: "Debes cargar una imagen." });
     }
 
@@ -108,19 +107,6 @@ const getProduct = async (req, res) => {
   }
 };
 
-const getActionProduct = async (req, res) => {
-  try {
-    const productCodigo = req.params.codigo;
-    const product = await findProduct(productCodigo);
-
-    res.json(product);
-  } catch (error) {
-    console.error(error);
-    // Manejar el error apropiadamente
-    res.status(500).json({ error: "Error al cargar la página" });
-  }
-};
-
 const actionProductDelete = async (req, res) => {
   try {
     const productCode = req.body.codigo;
@@ -166,8 +152,6 @@ const actionProductSave = async (req, res) => {
       category_id,
     };
 
-    console.log("newProduct: ", newProduct);
-
     await saveProduct(newProduct);
 
     res.status(201).json({ message: "Producto editado con éxito." });
@@ -181,7 +165,6 @@ module.exports = {
   registerProduct,
   actionProductDelete,
   actionProductSave,
-  getCategories,
-  getActionProduct,
+  getCategories,  
   getProduct,
 };
