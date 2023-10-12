@@ -4,7 +4,9 @@ const {
   findProduct,
   checkProduct,
   deleteProduct,
-  readCategories,
+  readCategories,  
+  checkCategory,
+  saveCategory
 } = require("../services/productServices");
 
 const multer = require("multer");
@@ -27,8 +29,6 @@ const upload = multer({ storage });
 
 const registerProduct = async (req, res) => {
   try {
-    console.log("registerProduct", req.body);
-
     // Destructuring
     const {
       productCode,
@@ -57,8 +57,6 @@ const registerProduct = async (req, res) => {
         category_id,
       };
 
-      console.log("newProduct: ", newProduct);
-
       await saveProduct(newProduct);
 
       res.status(201).json({ message: "Producto registrado con éxito." });
@@ -67,6 +65,29 @@ const registerProduct = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "Error al crear el producto." });
+  }
+};
+
+const registerCategory = async (req, res) => {
+  try {
+    // Destructuring
+    const {
+      categoryName
+    } = req.body;
+
+    if (!(await checkCategory(categoryName))) {
+      const newCategory = {
+        categoryName
+      };
+
+      await saveCategory(newCategory);
+
+      res.status(201).json({ message: "Categoría registrada con éxito." });
+    } else {
+      res.status(400).json({ error: "Ya existe ese categoría." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al crear la categoría." });
   }
 };
 
@@ -132,8 +153,7 @@ const actionProductSave = async (req, res) => {
     } = req.body;
 
     // Verifica si se cargó una imagen
-    if (!req.file) {
-      console.log("Control de imagen: ", req.file);
+    if (!req.file) {     
       return res.status(400).json({ error: "Debes cargar una imagen." });
     }
 
@@ -167,4 +187,5 @@ module.exports = {
   actionProductSave,
   getCategories,  
   getProduct,
+  registerCategory
 };

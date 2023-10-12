@@ -23,8 +23,7 @@ async function findUser(emailLogin) {
 
 // Función para verificar si un usuario existe por su email
 async function checkUser(emailLogin) {
-  try {
-    console.log("CheckUser:", emailLogin)
+  try {   
     const usuario = await User.findOne({ where: { email: emailLogin } });
     return usuario !== null;
   } catch (error) {

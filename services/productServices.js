@@ -11,6 +11,15 @@ async function saveProduct(newProduct) {
   }
 }
 
+async function saveCategory(newCategory) {
+  try {
+    const category = await Category.create(newCategory);
+    return category;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // Función para buscar un producto por su ID
 async function findProduct(cod) {
   try {
@@ -18,6 +27,17 @@ async function findProduct(cod) {
       where: { productCode: cod },
     });
     return producto;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findCategory(categoryN) {
+  try {
+    const category = await Category.findOne({
+      where: { categoryName: categoryN },
+    });
+    return category;
   } catch (error) {
     throw error;
   }
@@ -40,6 +60,16 @@ async function checkProduct(cod) {
     const producto = await findProduct(cod);
 
     return producto !== null;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function checkCategory(categoryName) {
+  try {
+    const category = await findCategory(categoryName);
+
+    return category !== null;
   } catch (error) {
     throw error;
   }
@@ -86,5 +116,8 @@ module.exports = {
   checkProduct,
   readProducts,
   readCategories,
-  findProductsByProductIds
+  findProductsByProductIds,
+  checkCategory,
+  findCategory,
+  saveCategory
 };

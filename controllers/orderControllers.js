@@ -97,9 +97,8 @@ const actionDeleteFromCart = async (req, res) => {
   try {
     const orderId = req.body.orderId;
     const orderDetailsId = req.body.orderDetailsId;
-    const totalProduct = req.body.totalProduct;    
-    
-    console.log("orderController-actionDeleteFromCart: ", orderId, orderDetailsId, totalProduct)
+    const totalProduct = req.body.totalProduct;
+   
     await deleteOrderDetail(orderDetailsId);
     
     await subtractProductPriceFromOrderTotal(orderId, totalProduct);
@@ -114,7 +113,6 @@ const actionDeleteCart = async (req, res) => {
   try {
     const orderId = req.body.orderId;
     
-    console.log("orderController-actionDeleteFromCart: ", orderId)
     await deleteAllOrderDetails(orderId);
     
     await deleteOrder(orderId);
