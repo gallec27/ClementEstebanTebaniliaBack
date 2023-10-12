@@ -104,6 +104,17 @@ async function findOrderByUser(userId) {
   }
 }
 
+async function findOrderDetails(orderId) {
+  try {
+    const orderDetails = await OrderDetail.findAll({
+      where: { order_id: orderId },
+    });
+    return orderDetails;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function findOrderById(orderId) {
   try {
     const order = await Order.findOne({
@@ -144,6 +155,43 @@ async function readOrders() {
   }
 }
 
+async function deleteOrderDetail(orderDetailsId) {
+  try {
+    const orderDetail = await OrderDetail.findByPk(orderDetailsId);
+    console.log("orderService-deleteOrderDetail: ", orderDetail);
+
+    await orderDetail.destroy();
+  } catch (error) {
+    console.log("orderService-deleteOrderDetail: ", error);
+    throw error;
+  }
+}
+
+async function subtractProductPriceFromOrderTotal(orderId, productPrice) {
+  try {
+    const order = await Order.findByPk(orderId);
+    console.log("orderService-substract: ", order)
+
+    const currentTotalPrice = parseFloat(order.total_price);
+    const productPriceNumeric = parseFloat(productPrice);
+    console.log("orderService-substract: ", currentTotalPrice, productPriceNumeric);
+
+    
+    if (isNaN(currentTotalPrice) || isNaN(productPriceNumeric)) {
+      console.log("orderService-substract NaN");
+      throw new Error('Invalid numeric values for subtraction');
+    }
+    
+    const newTotalPrice = currentTotalPrice - productPriceNumeric;
+    
+    order.total_price = newTotalPrice >= 0 ? newTotalPrice : 0;
+    await order.save();
+  } catch (error) {
+    console.log("orderService-substract error: ", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createOrder,
   findOrderByUser,
@@ -153,4 +201,7 @@ module.exports = {
   readOrders,
   updateOrder,
   addOrUpdateOrderDetail,
+  findOrderDetails,
+  deleteOrderDetail,
+  subtractProductPriceFromOrderTotal  
 };

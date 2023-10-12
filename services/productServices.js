@@ -65,6 +65,20 @@ async function readCategories() {
   }
 }
 
+async function findProductsByProductIds(productIds) {
+  try {
+    const products = await Product.findAll({
+      where: {
+        id: productIds, 
+      },
+    });
+
+    return products;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   saveProduct,
   findProduct,
@@ -72,4 +86,5 @@ module.exports = {
   checkProduct,
   readProducts,
   readCategories,
+  findProductsByProductIds
 };
