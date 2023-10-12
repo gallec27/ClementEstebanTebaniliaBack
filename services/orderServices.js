@@ -192,6 +192,26 @@ async function subtractProductPriceFromOrderTotal(orderId, productPrice) {
   }
 }
 
+async function deleteAllOrderDetails(orderId) {
+  try {
+    await OrderDetail.destroy({
+      where: { order_id: orderId },
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteOrder(orderId) {
+  try {
+    const order = await Order.findByPk(orderId);
+    
+    await order.destroy();
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   createOrder,
   findOrderByUser,
@@ -203,5 +223,6 @@ module.exports = {
   addOrUpdateOrderDetail,
   findOrderDetails,
   deleteOrderDetail,
-  subtractProductPriceFromOrderTotal  
+  subtractProductPriceFromOrderTotal,
+  deleteAllOrderDetails  
 };

@@ -12,8 +12,10 @@ const Order = sequelize.define('tb_orders', {
     allowNull: false,
   },
   shipping_address: {
-    type: DataTypes.STRING(255), // Cambiado a STRING con longitud 255
+    type: DataTypes.STRING(255), 
   },
+}, {
+  timestamps: true, 
 });
 
 Order.belongsTo(User, { foreignKey: 'user_id' });

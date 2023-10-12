@@ -40,7 +40,7 @@ const User = sequelize.define('tb_users', {
     allowNull: false
   },
 }, {
-  timestamps: true, // Esto habilitará los campos createdAt y updatedAt
+  timestamps: true, 
 });
 
 module.exports = User;

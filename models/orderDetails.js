@@ -11,6 +11,8 @@ const OrderDetail = sequelize.define('tb_orderDetails', {
   price: {
     type: DataTypes.DECIMAL(10, 2),
   },
+}, {
+  timestamps: true, 
 });
 
 OrderDetail.belongsTo(Order, { foreignKey: 'order_id' });

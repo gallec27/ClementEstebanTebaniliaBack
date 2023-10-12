@@ -6,7 +6,9 @@ const {
   updateOrder,
   findOrderDetails,
   deleteOrderDetail,
-  subtractProductPriceFromOrderTotal
+  subtractProductPriceFromOrderTotal,
+  deleteOrder,
+  deleteAllOrderDetails
 } = require("../services/orderServices");
 
 const { findProductsByProductIds } = require("../services/productServices");
@@ -108,8 +110,24 @@ const actionDeleteFromCart = async (req, res) => {
   }
 };
 
+const actionDeleteCart = async (req, res) => {
+  try {
+    const orderId = req.body.orderId;
+    
+    console.log("orderController-actionDeleteFromCart: ", orderId)
+    await deleteAllOrderDetails(orderId);
+    
+    await deleteOrder(orderId);
+
+    return res.status(200).json({ mensaje: "Orden de compra eliminada." });
+  } catch (error) {
+    res.status(500).json({ error: "Error al eliminar la orden de compra." });
+  }
+};
+
 module.exports = {
   actionAddToCart,
   getOrder,
-  actionDeleteFromCart
+  actionDeleteFromCart,
+  actionDeleteCart
 };

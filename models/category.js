@@ -7,7 +7,7 @@ const Category = sequelize.define('tb_categories', {
     allowNull: false,
   },
 }, {
-  timestamps: true, // Esto habilitará los campos createdAt y updatedAt
+  timestamps: true, 
 }
 );
 
